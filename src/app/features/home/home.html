@@ -1,2 +1,35 @@
-<h2 class="text-2xl font-bold">Bienvenido a la Sala de Juegos</h2>
-<p class="mt-2 text-gray-600">Elegí un juego para comenzar.</p>
+<div class="min-h-screen bg-black text-white p-8">
+
+    <!-- HEADER -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-bold tracking-wider text-red-500">
+            AGON
+        </h1>
+        <p class="text-zinc-400">Digital Arena</p>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Sin borde -->
+<app-card class="" corners="TR BL"  [bordered]="true">
+  <span>🧠</span>
+  <h3>Memoria</h3>
+  <p>Poné a prueba tu memoria</p>
+</app-card>
+
+<!-- Con borde cyan (default) -->
+<app-card [bordered]="true" [clickable]="true">
+  <span>🧠</span>
+  <h3>Memoria</h3>
+</app-card>
+
+<!-- Con borde verde -->
+<app-card [bordered]="true" borderColor="#00c896">
+  <span>🧠</span>
+  <h3>Memoria</h3>
+</app-card>
+
+    </div>
+
+</div>

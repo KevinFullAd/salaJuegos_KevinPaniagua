@@ -1,0 +1,36 @@
+<button
+  type="button"
+  class="cyber-card-wrapper cyber-button"
+  [class.clickable]="clickable && !disabled"
+  [class.bordered]="bordered"
+  [class.solid]="variant === 'solid'"
+  [class.outline]="variant === 'outline'"
+  [class.hover-glow]="hoverGlow"
+  [class.hover-scale]="hoverScale"
+  [class.has-glow]="glow"
+  [class.disabled]="disabled"
+  [style.--border-color]="color"
+  [style.--button-color]="color"
+  [style.--button-text]="resolvedTextColor"
+  [style.--clip-path]="clipPath"
+  [style.--glow]="glowStyle"
+  [ngStyle]="styles"
+  [ngClass]="customClass"
+  [disabled]="disabled">
+
+  <span class="cyber-card-border-layer"></span>
+
+  <span class="cyber-card-inner cyber-button-inner">
+    @if (resolvedIcon) {
+      <lucide-icon
+        class="cyber-button-icon"
+        [img]="resolvedIcon"
+        [size]="iconSize"
+        [color]="resolvedTextColor">
+      </lucide-icon>
+    }
+
+    <span class="cyber-button-label">{{ label }}</span>
+    <ng-content></ng-content>
+  </span>
+</button>

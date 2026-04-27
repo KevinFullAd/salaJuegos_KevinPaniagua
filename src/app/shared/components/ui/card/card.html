@@ -1,0 +1,13 @@
+<div
+  class="cyber-card-wrapper"
+  [class.clickable]="clickable"
+  [class.bordered]="bordered"
+  [style.--border-color]="borderColor"
+  [style.--clip-path]="clipPath">
+
+  <div class="cyber-card-border-layer"></div>
+  <div class="cyber-card-inner" [ngStyle]="styles" [ngClass]="customClass">
+    <ng-content></ng-content>
+  </div>
+
+</div>
