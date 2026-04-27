@@ -1,2 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Assisted Sensors";
+  src: url("/fonts/assisted-sensors/assisted-sensors-demo.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron/orbitron-light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron/orbitron-medium.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron/orbitron-bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron/orbitron-black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Orbitron", system-ui, sans-serif;
+  --font-display: "Assisted Sensors", "Orbitron", system-ui, sans-serif;
+}
+
+:root {
+  --app-font-family: "Orbitron", system-ui, sans-serif;
+  --app-display-font-family: "Assisted Sensors", "Orbitron", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  font-family: var(--app-font-family) !important;
+}
+
+.font-assisted-sensors {
+  font-family: var(--app-display-font-family) !important;
+}

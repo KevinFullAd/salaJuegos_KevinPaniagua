@@ -1,0 +1,62 @@
+@import "../card/card.css";
+
+.cyber-button {
+  --button-color: #00e5ff;
+  --button-text: #e0f0ff;
+  --glow: none;
+
+  width: 100%;
+  border: 0;
+  padding: 0;
+  color: var(--button-text);
+  background: transparent;
+  box-shadow: var(--glow);
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+}
+
+.cyber-button-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0.8125rem 1.75rem;
+  color: var(--button-text);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cyber-button.solid .cyber-button-inner {
+  background: var(--button-color);
+  color: var(--button-text);
+}
+
+.cyber-button.outline .cyber-button-inner {
+  background: #111318;
+}
+
+.cyber-button-icon {
+  flex: 0 0 auto;
+  color: var(--button-text);
+}
+
+.cyber-button.hover-glow:hover {
+  box-shadow: 0 0 20px color-mix(in srgb, var(--button-color) 55%, transparent);
+}
+
+.cyber-button.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.cyber-button.has-glow {
+  box-shadow: var(--glow);
+}
+
+.cyber-button.disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  pointer-events: none;
+}

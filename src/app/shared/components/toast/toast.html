@@ -1,0 +1,16 @@
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+
+    @for (toast of toasts; track toast) {
+
+    <div class="px-4 py-2 text-white shadow-lg border-l-4" [ngClass]="{
+        'bg-green-600 border-green-300': toast.type === 'success',
+        'bg-red-600 border-red-300': toast.type === 'error',
+        'bg-yellow-600 border-yellow-300': toast.type === 'warning',
+        'bg-blue-600 border-blue-300': toast.type === 'info'
+        }">
+        {{ toast.text }}
+    </div>
+
+    }
+
+</div>

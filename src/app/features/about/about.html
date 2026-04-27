@@ -1,1 +1,23 @@
-<p>about works!</p>
+<section *ngIf="currentUser$ | async as currentUser" class="mb-6">
+    <h2>Usuario actual</h2>
+    <p>{{ currentUser.nombre || currentUser.email }}</p>
+    <p *ngIf="currentUser.apellido">{{ currentUser.apellido }}</p>
+</section>
+
+<div *ngIf="githubUser() as user; else loading">
+
+    <img [src]="user.avatar_url" class="w-32 h-32 rounded-full mx-auto" />
+
+    <h2>{{ user.name || user.login }}</h2>
+
+    <p>{{ user.login }}</p>
+
+    <a [href]="user.html_url" target="_blank">
+        Ver GitHub
+    </a>
+
+</div>
+
+<ng-template #loading>
+    <p>Cargando...</p>
+</ng-template>
