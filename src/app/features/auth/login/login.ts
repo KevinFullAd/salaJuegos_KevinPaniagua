@@ -3,17 +3,28 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
 import { ToastService } from '@services/toast.service';
+import { CyberButton } from '@components/ui/cyber-button/cyber-button';
+import { Card } from '@components/ui/card/card';
+import { RouterLink } from '@angular/router';
+import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, CyberButton, Card, RouterLink, LucideAngularModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   loginForm: FormGroup;
   submitted = false;
+  showPassword = false;
+  readonly eyeIcon = Eye;
+  readonly eyeOffIcon = EyeOff;
+  fieldCardStyles = {
+    padding: '0',
+    background: 'var(--color-surface-elevated)',
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -24,6 +35,10 @@ export class Login {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     })
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit() {

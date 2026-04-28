@@ -16,13 +16,14 @@ export class CyberButton extends Card implements OnChanges {
   @Input() iconSize = 16;
 
   @Input() variant: 'outline' | 'solid' = 'outline';
-  @Input() color = '#00e5ff';
+  @Input() color = 'var(--color-primary)';
   @Input() textColor = '';
 
   @Input() glow = false;
   @Input() hoverGlow = true;
   @Input() hoverScale = true;
 
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
   @Input() disabled = false;
   @Input() override bordered = true;
   @Input() override clickable = true;
@@ -44,11 +45,11 @@ export class CyberButton extends Card implements OnChanges {
 
   get resolvedTextColor(): string {
     if (this.textColor) return this.textColor;
-    return this.variant === 'solid' ? '#001a12' : '#e0f0ff';
+    return this.variant === 'solid' ? 'var(--color-on-primary)' : 'var(--color-text)';
   }
 
   get glowStyle(): string {
     if (!this.glow) return 'none';
-    return `0 0 18px ${this.color}88`;
+    return `0 0 18px color-mix(in srgb, ${this.color} 55%, transparent)`;
   }
 }

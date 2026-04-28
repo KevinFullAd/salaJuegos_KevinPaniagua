@@ -12,7 +12,7 @@ import { CyberBase } from '../ts/cyber-base';
 export class Card extends CyberBase {
   @Input() clickable = false;
   @Input() bordered = false;
-  @Input() borderColor = '#00e5ff';
+  @Input() borderColor = 'var(--color-primary)';
   @Input() styles: { [key: string]: string } = {};
   @Input() customClass = '';
 }

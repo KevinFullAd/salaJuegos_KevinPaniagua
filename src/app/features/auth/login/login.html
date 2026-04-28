@@ -1,21 +1,98 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 max-w-sm mx-auto">
+﻿<form
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit()"
+  class="page page-narrow page-center login-container flex flex-col gap-5">
 
-    <h2 class="text-xl font-bold">LOGIN</h2>
+  <div class="mb-2">
+    <h1 class="title">LOGIN</h1>
+    <p class="subtitle">ACCEDE A TU CUENTA</p>
+  </div>
 
-    <input type="email" placeholder="Email" formControlName="email" class="p-2 border border-gray-500" />
+  <!-- EMAIL -->
+  <div class="field">
+    <app-card
+      [bordered]="true"
+      corners="TL BR"
+      [cut]="12"
+      [styles]="fieldCardStyles"
+      borderColor="var(--border-color-soft)">
+      <input
+        type="email"
+        placeholder="usuario@ejemplo.com"
+        formControlName="email"
+        class="input input-card"
+      />
+    </app-card>
 
-    <div *ngIf="(loginForm.get('email')?.touched || submitted) && loginForm.get('email')?.invalid">
-        <small>Email inválido</small>
-    </div>
+    <small *ngIf="(loginForm.get('email')?.touched || submitted) && loginForm.get('email')?.invalid">
+      Email inválido
+    </small>
+  </div>
 
-    <input type="password" placeholder="Contraseña" formControlName="password" class="p-2 border border-gray-500" />
+  <!-- PASSWORD -->
+  <div class="field">
+    <app-card
+      [bordered]="true"
+      corners="TL BR"
+      [cut]="12"
+      [styles]="fieldCardStyles"
+      borderColor="var(--border-color-soft)">
+      <div class="password-field">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="••••••••"
+          formControlName="password"
+          class="input input-card password-input"
+        />
 
-    <div *ngIf="(loginForm.get('password')?.touched || submitted) && loginForm.get('password')?.invalid">
-        <small class="text-red-500">Mínimo 6 caracteres</small>
-    </div>
+        <button
+          type="button"
+          class="password-toggle"
+          [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+          [attr.aria-pressed]="showPassword"
+          (click)="togglePasswordVisibility()">
+          <lucide-icon
+            [img]="showPassword ? eyeOffIcon : eyeIcon"
+            [size]="18"
+            color="currentColor">
+          </lucide-icon>
+        </button>
+      </div>
+    </app-card>
 
-    <button type="submit" class="bg-red-500 text-white py-2">
-        Iniciar sesión
-    </button>
+    <small *ngIf="(loginForm.get('password')?.touched || submitted) && loginForm.get('password')?.invalid">
+      Mínimo 6 caracteres
+    </small>
+  </div>
+
+  <!-- OPTIONS -->
+  <div class="options">
+    <label>
+      <input type="checkbox" />
+      Recordarme
+    </label>
+
+    <a class="link">¿Olvidó su contraseña?</a>
+  </div>
+
+  <!-- LOGIN BUTTON -->
+  <app-cyber-button
+    label="INICIAR SESIÓN"
+    icon="log-in"
+    type="submit"
+    variant="solid"
+    [glow]="true"
+    corners="TL BR"
+    [hoverGlow]="true"
+    [hoverScale]="true"
+    color="var(--color-accent)"
+    class="w-full"
+  ></app-cyber-button>
+
+  <!-- REGISTER -->
+  <div class="register-container">
+    ¿No tienes cuenta?
+    <a routerLink="/register" class="link">Registrate</a>
+  </div>
 
 </form>

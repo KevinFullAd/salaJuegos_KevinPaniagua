@@ -1,8 +1,8 @@
 .cyber-card-wrapper {
-  --border-color: #00e5ff;
+  --border-color: var(--color-primary);
   --clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  --border-size: 1.5px;
-  --card-bg: #111318;
+  --border-size: var(--border-size);
+  --card-bg: var(--color-surface);
 
   position: relative;
   display: block;
@@ -11,7 +11,7 @@
 
 .cyber-card-wrapper.clickable {
   cursor: pointer;
-  transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+  transition: transform var(--transition-fast), filter var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .cyber-card-wrapper.clickable:hover {
