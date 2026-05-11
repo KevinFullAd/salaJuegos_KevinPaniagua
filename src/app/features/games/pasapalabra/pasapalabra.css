@@ -1,0 +1,137 @@
+.game-shell {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.rosco {
+  position: relative;
+  width: min(100%, 30rem);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+.rosco-letter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+  transform: rotate(var(--angle)) translate(13rem) rotate(calc(-1 * var(--angle)));
+  transition: transform 0.3s ease, background-color 0.2s ease;
+}
+
+.rosco-letter span {
+  font-weight: 700;
+}
+
+.state-0 {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+}
+
+.state-1 {
+  background: rgba(48, 209, 88, 0.2);
+  color: #0f5132;
+}
+
+.state-2 {
+  background: rgba(255, 69, 58, 0.2);
+  color: #7a1d1d;
+}
+
+.state-3 {
+  background: rgba(255, 204, 0, 0.18);
+  color: #664d03;
+}
+
+.question-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 1.5rem;
+}
+
+.question-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.question-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.question-text {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.answer-row,
+.action-row {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.answer-row {
+  grid-template-columns: 1fr auto;
+}
+
+.answer-row input {
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.primary-button,
+.secondary-button {
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+}
+
+.action-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.game-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--color-text-muted);
+}

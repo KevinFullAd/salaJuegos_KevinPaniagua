@@ -1,0 +1,25 @@
+<section class="game-shell">
+  <div class="game-header">
+    <div>
+      <p class="eyebrow">Mayor o Menor</p>
+      <h2>Elige la siguiente carta</h2>
+    </div>
+    <button type="button" class="secondary-button" (click)="newGame()">Reiniciar</button>
+  </div>
+
+  <div class="card-display">
+    <img class="game-illustration" src="/assets/higher-or-lower.png" alt="Mayor o Menor" />
+    <div class="card-number">{{ currentNumber }}</div>
+    <p class="instructions">La proxima carta sera mayor o menor?</p>
+  </div>
+
+  <div class="buttons-row">
+    <button class="action-button" type="button" [disabled]="finished" (click)="chooseHigher()">Mayor</button>
+    <button class="action-button" type="button" [disabled]="finished" (click)="chooseLower()">Menor</button>
+  </div>
+
+  <div class="game-footer">
+    <span>Puntos: {{ score }}</span>
+    <span>{{ message }}</span>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+<section class="game-shell">
+  <div class="game-header">
+    <div>
+      <p class="eyebrow">Ahorcado</p>
+      <h2>Adivina la palabra</h2>
+    </div>
+    <button class="secondary-button" type="button" (click)="newGame()">Reiniciar</button>
+  </div>
+
+  <div class="hangman-board">
+    <img [src]="imagePath" alt="Ahorcado" />
+    <div class="word-display">{{ displayedWord }}</div>
+  </div>
+
+  <div class="stats-row">
+    <span>Vidas: {{ attempts }} / {{ maxAttempts }}</span>
+    <span>Puntos: {{ score }}</span>
+  </div>
+
+  <div class="letters-grid">
+    <button
+      *ngFor="let letter of letters"
+      type="button"
+      [disabled]="guessedLetters.has(letter) || finished"
+      (click)="onLetter(letter)"
+      [class.used]="guessedLetters.has(letter)">
+      {{ letter }}
+    </button>
+  </div>
+
+  <div class="message-row">
+    <p *ngIf="message" class="game-message">{{ message }}</p>
+    <p *ngIf="hasLost && !message" class="game-message">Perdiste. La palabra era {{ word.toUpperCase() }}.</p>
+  </div>
+</section>

@@ -1,0 +1,79 @@
+.game-shell {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--color-success);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.card-display {
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  gap: 1rem;
+}
+
+.game-illustration {
+  width: min(100%, 280px);
+  border-radius: 1.25rem;
+  object-fit: cover;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.16);
+}
+
+.card-number {
+  font-size: 5rem;
+  font-weight: 800;
+  letter-spacing: 0.2rem;
+}
+
+.instructions {
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.buttons-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.action-button,
+.secondary-button {
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.action-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.game-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+}

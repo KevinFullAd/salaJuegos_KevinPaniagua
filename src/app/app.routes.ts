@@ -19,7 +19,11 @@ export const routes: Routes = [
             {path:"login", component: Login},
             {path:"register", component: Register},
             {path:"results", component: Results, canActivate: [authGuard]},
-            {path:"games/:slug", component: GamePlaceholder, canActivate: [authGuard]},
+            {path:"games/ahorcado", loadComponent: () => import('@features/games/ahorcado/ahorcado').then((module) => module.Ahorcado)},
+            {path:"games/mayor-menor", loadComponent: () => import('@features/games/higher-or-lower/higher-or-lower').then((module) => module.HigherOrLower)},
+            {path:"games/preguntados", loadComponent: () => import('@features/games/preguntados/preguntados').then((module) => module.Preguntados)},
+            {path:"games/pasapalabra", loadComponent: () => import('@features/games/pasapalabra/pasapalabra').then((module) => module.Pasapalabra)},
+            {path:"games/:slug", component: GamePlaceholder},
             {path:"about", component: About},
             
         ]

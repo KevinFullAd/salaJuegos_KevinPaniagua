@@ -15,7 +15,7 @@
 
     <ng-template #guestActions>
       <div class="home-session">
-        <p class="home-copy">Inicia sesion para jugar y guardar tus resultados.</p>
+        <p class="home-copy">Puedes jugar sin iniciar sesion. Si entras con tu cuenta, ademas podras guardar resultados.</p>
         <div class="home-actions">
           <a routerLink="/login" class="action-link">Login</a>
           <a routerLink="/register" class="action-link">Registro</a>
@@ -44,16 +44,19 @@
       [borderColor]="juego.color"
       customClass="game-card">
       <div class="game-code" [style.color]="juego.color">{{ juego.codigo }}</div>
+      <div class="game-media">
+        <img [src]="juego.imagen" [alt]="juego.nombre" />
+      </div>
       <div class="game-body">
         <span class="game-status">{{ juego.estado }}</span>
         <h2>{{ juego.nombre }}</h2>
         <p>{{ juego.desc }}</p>
 
-        <a *ngIf="currentUser$ | async; else loginRequired" [routerLink]="juego.ruta" class="game-link">
-          Entrar
+        <a *ngIf="juego.disponible; else unavailableGame" [routerLink]="juego.ruta" class="game-link">
+          Jugar ahora
         </a>
-        <ng-template #loginRequired>
-          <a routerLink="/login" class="game-link">Iniciar sesion</a>
+        <ng-template #unavailableGame>
+          <span class="game-link disabled">En preparacion</span>
         </ng-template>
       </div>
     </app-card>

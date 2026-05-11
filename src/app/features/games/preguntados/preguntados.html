@@ -1,0 +1,41 @@
+<section class="game-shell">
+  <div class="game-header">
+    <div>
+      <p class="eyebrow">Preguntados</p>
+      <h2>Responde correctamente</h2>
+    </div>
+    <button type="button" class="secondary-button" (click)="restart()">Reiniciar</button>
+  </div>
+
+  <div *ngIf="loading" class="status-box">Cargando preguntas...</div>
+  <div *ngIf="error" class="status-box error">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && currentQuestion" class="question-card">
+    <div class="question-meta">
+      <span>Pregunta {{ currentIndex + 1 }} / {{ questions.length }}</span>
+      <span>Puntaje: {{ score }}</span>
+    </div>
+
+    <p class="question-text">{{ currentQuestion.question }}</p>
+
+    <div class="answers-grid">
+      <button
+        *ngFor="let answer of answers"
+        type="button"
+        [disabled]="!!selectedAnswer"
+        (click)="selectAnswer(answer)"
+        [class.correct]="selectedAnswer && answer === currentQuestion.correct_answer"
+        [class.wrong]="selectedAnswer && answer === selectedAnswer && answer !== currentQuestion.correct_answer">
+        {{ answer }}
+      </button>
+    </div>
+
+    <p class="result-text" *ngIf="selectedAnswer">
+      {{ selectedAnswer === currentQuestion.correct_answer ? 'Correcto!' : 'Incorrecto. La respuesta correcta era ' + currentQuestion.correct_answer }}
+    </p>
+
+    <div *ngIf="finished" class="status-box success">
+      Juego terminado. Tu puntaje es {{ score }}.
+    </div>
+  </div>
+</section>
