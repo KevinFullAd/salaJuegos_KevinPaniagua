@@ -5,7 +5,7 @@ import { AuthService } from '@services/auth.service';
 import { ToastService } from '@services/toast.service';
 import { CyberButton } from '@components/ui/cyber-button/cyber-button';
 import { Card } from '@components/ui/card/card';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
@@ -21,6 +21,11 @@ export class Login {
   showPassword = false;
   readonly eyeIcon = Eye;
   readonly eyeOffIcon = EyeOff;
+  quickAccessUsers = [
+    { label: 'Jugador 1', email: 'test1@test.com', password: '123456' },
+    { label: 'Jugador 2', email: 'test3@test.com', password: '123456' },
+    { label: 'Admin', email: 'admin@admin.admin', password: 'adminadmin' },
+  ];
   fieldCardStyles = {
     padding: '0',
     background: 'var(--color-surface-elevated)',
@@ -29,7 +34,8 @@ export class Login {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ){
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -41,15 +47,23 @@ export class Login {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit() {
+  fillQuickAccess(user: { email: string; password: string }) {
+    this.loginForm.patchValue({
+      email: user.email,
+      password: user.password,
+    });
+    this.submitted = false;
+  }
+
+  async onSubmit() {
     this.submitted = true;
 
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
       try {
-        this.authService.login(email, password);
+        await this.authService.login(email, password);
         this.toastService.show('LOGIN_SUCCESS');
-        console.log('LOGIN OK', this.loginForm.value);
+        this.router.navigate(['/']);
       } catch {
         this.toastService.show('LOGIN_ERROR');
       }

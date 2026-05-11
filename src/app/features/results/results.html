@@ -1,0 +1,59 @@
+<div class="page page-wide page-center results-page">
+  <header class="results-header">
+    <div>
+      <p class="eyebrow">Listados</p>
+      <h1>Resultados</h1>
+    </div>
+    <a routerLink="/" class="back-link">Volver al home</a>
+  </header>
+
+  @if (loading()) {
+    <app-card [bordered]="true" corners="TR BL" [cut]="16" customClass="results-panel">
+      <p class="state">Cargando resultados...</p>
+    </app-card>
+  } @else if (errorMessage()) {
+    <app-card [bordered]="true" corners="TR BL" [cut]="16" customClass="results-panel">
+      <p class="state error">Error: {{ errorMessage() }}</p>
+    </app-card>
+  } @else {
+    <section class="results-grid">
+      @for (section of gameSections; track section.slug) {
+        <app-card [bordered]="true" corners="TR BL" [cut]="16" customClass="results-panel">
+          <div class="section-header">
+            <h2>{{ section.name }}</h2>
+            <span>{{ resultsByGame(section.slug).length }} partidas</span>
+          </div>
+
+          @if (resultsByGame(section.slug).length === 0) {
+            <p class="state">Todavia no hay partidas guardadas.</p>
+          } @else {
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Puntaje</th>
+                    <th>Tiempo</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (result of resultsByGame(section.slug); track result.id; let index = $index) {
+                    <tr>
+                      <td>{{ index + 1 }}</td>
+                      <td>{{ result.score }}</td>
+                      <td>{{ result.time_seconds }}s</td>
+                      <td>{{ result.won ? 'Victoria' : 'Derrota' }}</td>
+                      <td>{{ formatDate(result.created_at) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </app-card>
+      }
+    </section>
+  }
+</div>

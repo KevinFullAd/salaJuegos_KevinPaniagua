@@ -1,23 +1,40 @@
-<section *ngIf="currentUser$ | async as currentUser" class="mb-6">
-    <h2>Usuario actual</h2>
-    <p>{{ currentUser.nombre || currentUser.email }}</p>
+<div class="page page-default page-center about-page">
+  <section *ngIf="currentUser$ | async as currentUser" class="session-panel">
+    <span>Sesion activa</span>
+    <strong>{{ currentUser.nombre || currentUser.email }}</strong>
     <p *ngIf="currentUser.apellido">{{ currentUser.apellido }}</p>
-</section>
+  </section>
 
-<div *ngIf="githubUser() as user; else loading">
+  <section class="about-grid" *ngIf="githubUser() as user; else loading">
+    <div class="profile">
+      <img [src]="user.avatar_url" [alt]="user.login" />
+      <div>
+        <p class="eyebrow">Quien Soy</p>
+        <h1>{{ user.name || user.login }}</h1>
+        <p class="username">@{{ user.login }}</p>
+        <a [href]="user.html_url" target="_blank" rel="noreferrer">Ver GitHub</a>
+      </div>
+    </div>
 
-    <img [src]="user.avatar_url" class="w-32 h-32 rounded-full mx-auto" />
+    <div class="content">
+      <article>
+        <h2>Bio</h2>
+        <p>{{ bio }}</p>
+      </article>
 
-    <h2>{{ user.name || user.login }}</h2>
+      <article>
+        <h2>Juego propio</h2>
+        <h3>{{ futureGame.name }}</h3>
+        <p>{{ futureGame.description }}</p>
+        <ul>
+          <li *ngFor="let rule of futureGame.rules">{{ rule }}</li>
+        </ul>
+        <p>{{ futureGame.metrics }}</p>
+      </article>
+    </div>
+  </section>
 
-    <p>{{ user.login }}</p>
-
-    <a [href]="user.html_url" target="_blank">
-        Ver GitHub
-    </a>
-
+  <ng-template #loading>
+    <p class="loading">Cargando perfil...</p>
+  </ng-template>
 </div>
-
-<ng-template #loading>
-    <p>Cargando...</p>
-</ng-template>

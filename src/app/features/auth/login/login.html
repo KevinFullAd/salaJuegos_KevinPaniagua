@@ -75,6 +75,19 @@
     <a class="link">¿Olvidó su contraseña?</a>
   </div>
 
+  <section class="quick-login" aria-label="Accesos rapidos">
+    <p>Acceso rapido</p>
+    <div class="quick-login-grid">
+      <button
+        *ngFor="let user of quickAccessUsers"
+        type="button"
+        class="quick-login-button"
+        (click)="fillQuickAccess(user)">
+        {{ user.label }}
+      </button>
+    </div>
+  </section>
+
   <!-- LOGIN BUTTON -->
   <app-cyber-button
     label="INICIAR SESIÓN"

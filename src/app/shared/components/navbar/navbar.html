@@ -1,12 +1,22 @@
-﻿<nav class="navbar">
+<nav class="navbar">
   <div class="navbar-inner">
-    <h1 class="navbar-brand">AGON</h1>
+    <a routerLink="/" class="navbar-brand">AGON</a>
 
-    <div class="navbar-links">
-      <a routerLink="/">Home</a>
-      <a routerLink="/login">Login</a>
-      <a routerLink="/register">Registro</a>
-      <a routerLink="/about">Quien Soy</a>
-    </div>
+    <ng-container *ngIf="currentUser$ | async as currentUser; else guestLinks">
+      <div class="navbar-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+        <a routerLink="/results" routerLinkActive="active">Listados</a>
+        <a routerLink="/about" routerLinkActive="active">Quien Soy</a>
+        <span class="navbar-user">{{ currentUser.nombre || currentUser.email }}</span>
+        <button type="button" class="navbar-action" (click)="logout()">Logout</button>
+      </div>
+    </ng-container>
+
+    <ng-template #guestLinks>
+      <div class="navbar-links">
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <a routerLink="/register" routerLinkActive="active">Registro</a>
+      </div>
+    </ng-template>
   </div>
 </nav>

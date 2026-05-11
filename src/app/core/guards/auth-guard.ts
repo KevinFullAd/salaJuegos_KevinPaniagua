@@ -9,11 +9,12 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const toastService = inject(ToastService);
 
-  if(authService.isLogged()){
+  return authService.hasSession().then((isLogged) => {
+    if(isLogged){
     return true;
-  }
+    }
 
-  toastService.show('AUTH_REQUIRED');
-  router.navigate(['/login']);
-  return false;
+    toastService.show('AUTH_REQUIRED');
+    return router.createUrlTree(['/login']);
+  });
 };

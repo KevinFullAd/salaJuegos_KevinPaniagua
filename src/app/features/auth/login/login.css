@@ -133,6 +133,44 @@ small {
   accent-color: var(--color-primary);
 }
 
+.quick-login {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.quick-login p {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
+
+.quick-login-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.quick-login-button {
+  min-width: 0;
+  padding: 0.55rem 0.4rem;
+  color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.06);
+  border: 1px solid var(--border-color-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: border-color var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+}
+
+.quick-login-button:hover {
+  color: var(--color-text);
+  background: rgba(var(--color-primary-rgb), 0.12);
+  border-color: var(--border-color-strong);
+}
+
 .link {
   color: var(--color-danger);
   cursor: pointer;

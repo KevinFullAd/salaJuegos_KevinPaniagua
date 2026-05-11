@@ -1,39 +1,71 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 max-w-sm mx-auto">
+<form
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+  class="page page-narrow page-center register-container">
 
-    <h2 class="text-xl font-bold">REGISTRO</h2>
+  <div class="register-header">
+    <h1 class="title">REGISTRO</h1>
+    <p class="subtitle">CREA TU PERFIL DE JUGADOR</p>
+  </div>
 
-    <!-- Nombre -->
-    <input type="text" placeholder="Nombre" formControlName="nombre" class="p-2 border border-gray-500" />
-    <div *ngIf="(registerForm.get('nombre')?.touched || submitted) && registerForm.get('nombre')?.invalid">
-        <small class="text-red-500">Mínimo 2 caracteres</small>
-    </div>
+  <div class="field">
+    <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
+      <input type="text" placeholder="Nombre" formControlName="nombre" class="input input-card" />
+    </app-card>
+    <small *ngIf="(registerForm.get('nombre')?.touched || submitted) && registerForm.get('nombre')?.invalid">
+      Mínimo 2 caracteres
+    </small>
+  </div>
 
-    <!-- Apellido -->
-    <input type="text" placeholder="Apellido" formControlName="apellido" class="p-2 border border-gray-500" />
-    <div *ngIf="(registerForm.get('apellido')?.touched || submitted) && registerForm.get('apellido')?.invalid">
-        <small class="text-red-500">Mínimo 2 caracteres</small>
-    </div>
+  <div class="field">
+    <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
+      <input type="text" placeholder="Apellido" formControlName="apellido" class="input input-card" />
+    </app-card>
+    <small *ngIf="(registerForm.get('apellido')?.touched || submitted) && registerForm.get('apellido')?.invalid">
+      Mínimo 2 caracteres
+    </small>
+  </div>
 
-    <!-- Edad -->
-    <input type="number" placeholder="Edad" formControlName="edad" class="p-2 border border-gray-500" />
-    <div *ngIf="(registerForm.get('edad')?.touched || submitted) && registerForm.get('edad')?.invalid">
-        <small class="text-red-500">Debe ser entre 18 y 99</small>
-    </div>
+  <div class="field">
+    <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
+      <input type="number" placeholder="Edad" formControlName="edad" class="input input-card" />
+    </app-card>
+    <small *ngIf="(registerForm.get('edad')?.touched || submitted) && registerForm.get('edad')?.invalid">
+      Debe ser entre 18 y 99
+    </small>
+  </div>
 
-    <!-- Email -->
-    <input type="email" placeholder="Email" formControlName="email" class="p-2 border border-gray-500" />
-    <div *ngIf="(registerForm.get('email')?.touched || submitted) && registerForm.get('email')?.invalid">
-        <small class="text-red-500">Email inválido</small>
-    </div>
+  <div class="field">
+    <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
+      <input type="email" placeholder="usuario@ejemplo.com" formControlName="email" class="input input-card" />
+    </app-card>
+    <small *ngIf="(registerForm.get('email')?.touched || submitted) && registerForm.get('email')?.invalid">
+      Email inválido
+    </small>
+  </div>
 
-    <!-- Password -->
-    <input type="password" placeholder="Contraseña" formControlName="password" class="p-2 border border-gray-500" />
-    <div *ngIf="(registerForm.get('password')?.touched || submitted) && registerForm.get('password')?.invalid">
-        <small class="text-red-500">Mínimo 6 caracteres</small>
-    </div>
+  <div class="field">
+    <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
+      <input type="password" placeholder="Contraseña" formControlName="password" class="input input-card" />
+    </app-card>
+    <small *ngIf="(registerForm.get('password')?.touched || submitted) && registerForm.get('password')?.invalid">
+      Mínimo 6 caracteres
+    </small>
+  </div>
 
-    <button type="submit" class="bg-red-500 text-white py-2">
-        Crear cuenta
-    </button>
+  <app-cyber-button
+    label="CREAR CUENTA"
+    icon="user-plus"
+    type="submit"
+    variant="solid"
+    [glow]="true"
+    corners="TL BR"
+    color="var(--color-accent)"
+    class="w-full">
+  </app-cyber-button>
 
+  <div class="login-link">
+    ¿Ya tienes cuenta?
+    <a routerLink="/login">Iniciar sesión</a>
+  </div>
 </form>

@@ -1,35 +1,61 @@
-<div class="page page-wide page-center">
-
-    <!-- HEADER -->
-    <div class="mb-10">
-        <h1 class="text-4xl font-bold tracking-wider text-red-500">
-            AGON
-        </h1>
-        <p class="text-zinc-400">Digital Arena</p>
+<div class="page page-wide page-center home-page">
+  <header class="home-header">
+    <div>
+      <p class="eyebrow">Digital Arena</p>
+      <h1>AGON</h1>
     </div>
 
-    <!-- GRID -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- Sin borde -->
-<app-card class="" corners="TR BL"  [bordered]="true">
-  <span>🧠</span>
-  <h3>Memoria</h3>
-  <p>Poné a prueba tu memoria</p>
-</app-card>
-
-<!-- Con borde cyan (default) -->
-<app-card [bordered]="true" [clickable]="true">
-  <span>🧠</span>
-  <h3>Memoria</h3>
-</app-card>
-
-<!-- Con borde verde -->
-<app-card [bordered]="true" borderColor="#00c896">
-  <span>🧠</span>
-  <h3>Memoria</h3>
-</app-card>
-
+    <div class="home-session" *ngIf="currentUser$ | async as currentUser; else guestActions">
+      <p class="home-copy">Sesion iniciada como <strong>{{ currentUser.nombre || currentUser.email }}</strong>.</p>
+      <div class="home-actions">
+        <a routerLink="/results" class="action-link">Ver listados</a>
+        <button type="button" class="action-link danger" (click)="logout()">Cerrar sesion</button>
+      </div>
     </div>
 
+    <ng-template #guestActions>
+      <div class="home-session">
+        <p class="home-copy">Inicia sesion para jugar y guardar tus resultados.</p>
+        <div class="home-actions">
+          <a routerLink="/login" class="action-link">Login</a>
+          <a routerLink="/register" class="action-link">Registro</a>
+        </div>
+      </div>
+    </ng-template>
+  </header>
+
+  <section class="quick-access" aria-label="Accesos">
+    <app-cyber-button
+      label="LISTADOS"
+      icon="table-2"
+      variant="outline"
+      color="var(--color-primary)"
+      routerLink="/results">
+    </app-cyber-button>
+  </section>
+
+  <section class="games-grid" aria-label="Juegos disponibles">
+    <app-card
+      *ngFor="let juego of juegos"
+      [bordered]="true"
+      [clickable]="false"
+      corners="TR BL"
+      [cut]="16"
+      [borderColor]="juego.color"
+      customClass="game-card">
+      <div class="game-code" [style.color]="juego.color">{{ juego.codigo }}</div>
+      <div class="game-body">
+        <span class="game-status">{{ juego.estado }}</span>
+        <h2>{{ juego.nombre }}</h2>
+        <p>{{ juego.desc }}</p>
+
+        <a *ngIf="currentUser$ | async; else loginRequired" [routerLink]="juego.ruta" class="game-link">
+          Entrar
+        </a>
+        <ng-template #loginRequired>
+          <a routerLink="/login" class="game-link">Iniciar sesion</a>
+        </ng-template>
+      </div>
+    </app-card>
+  </section>
 </div>

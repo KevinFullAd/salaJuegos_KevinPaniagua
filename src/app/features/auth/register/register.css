@@ -1,0 +1,56 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.register-header {
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  color: var(--color-accent);
+  font-family: var(--app-display-font-family) !important;
+  font-size: clamp(2rem, 8vw, 3.25rem);
+  letter-spacing: 0;
+  line-height: 1;
+  text-shadow: var(--shadow-accent-md);
+}
+
+.subtitle,
+.login-link {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.input-card {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  color: var(--color-text);
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+
+.input-card::placeholder {
+  color: var(--color-text-subtle);
+}
+
+small {
+  color: var(--color-danger);
+  font-size: 0.75rem;
+}
+
+.login-link {
+  text-align: center;
+}
+
+.login-link a {
+  color: var(--color-primary);
+}

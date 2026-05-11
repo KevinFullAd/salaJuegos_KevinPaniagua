@@ -1,0 +1,17 @@
+<section class="mt-6 text-sm text-white">
+  <h2 class="mb-2 font-semibold">Test Supabase</h2>
+
+  @if (loading()) {
+    <p>Cargando todos...</p>
+  } @else if (errorMessage()) {
+    <p>Error: {{ errorMessage() }}</p>
+  } @else if (todos().length === 0) {
+    <p>No hay registros en la tabla todos.</p>
+  } @else {
+    <ul class="list-disc pl-5">
+      @for (todo of todos(); track todo.id) {
+        <li>{{ todo.name }}</li>
+      }
+    </ul>
+  }
+</section>
