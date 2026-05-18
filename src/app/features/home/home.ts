@@ -61,10 +61,10 @@ export class Home {
       codigo: 'F04',
       nombre: 'Firewall Breach',
       desc: 'Defiende una red bajo ataque y conserva su integridad.',
-      estado: 'Proximamente',
+      estado: 'Sprint 4',
       ruta: '/games/firewall-breach',
       imagen: '/assets/qwe.png',
-      disponible: false,
+      disponible: true,
       color: 'var(--color-accent)',
     },
   ];

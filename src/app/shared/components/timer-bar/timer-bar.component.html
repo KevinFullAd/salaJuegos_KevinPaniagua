@@ -1,0 +1,9 @@
+<div class="tb-shell">
+  <div class="tb-track">
+    <div class="tb-fill"
+         [style.width.%]="pct()"
+         [style.background]="barColor()">
+    </div>
+  </div>
+  <span class="tb-label" [style.color]="barColor()">{{ timeLeft() }}s</span>
+</div>

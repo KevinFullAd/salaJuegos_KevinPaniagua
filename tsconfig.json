@@ -8,8 +8,7 @@
       "@features/*": ["./src/app/features/*"],
       "@components/*": ["./src/app/shared/components/*"],
       "@services/*": ["./src/app/core/services/*"],
-      "@shared/*": ["./src/app/shared/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@shared/*": ["./src/app/shared/*"]
     },
     "strict": true,
     "noImplicitOverride": true,

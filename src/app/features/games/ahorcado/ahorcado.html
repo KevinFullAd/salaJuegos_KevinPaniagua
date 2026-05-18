@@ -1,35 +1,95 @@
-<section class="game-shell">
-  <div class="game-header">
-    <div>
-      <p class="eyebrow">Ahorcado</p>
-      <h2>Adivina la palabra</h2>
+<div class="ahorcado-shell">
+
+  <!-- Header: título + stats -->
+  <header class="ah-header">
+    <p class="ah-eyebrow">AGON · Ahorcado</p>
+    <div class="ah-stats">
+      <div class="ah-stat">
+        <span class="ah-stat-label">Vidas</span>
+        <span class="ah-stat-value">{{ attempts }}/{{ maxAttempts }}</span>
+      </div>
+      <div class="ah-stat">
+        <span class="ah-stat-label">Puntos</span>
+        <span class="ah-stat-value">{{ score }}</span>
+      </div>
+      <div class="ah-stat">
+        <span class="ah-stat-label">Tiempo</span>
+        <span class="ah-stat-value">{{ timeLeft() }}s</span>
+      </div>
     </div>
-    <button class="secondary-button" type="button" (click)="newGame()">Reiniciar</button>
+  </header>
+
+  <!-- Timer bar -->
+  <app-timer-bar
+    [maxTime]="maxTime"
+    (timesUp)="onTimesUp()"
+    (tick)="timeLeft.set($event)">
+  </app-timer-bar>
+
+  <!-- Área central: juego + overlay de inicio -->
+  <div class="ah-content">
+
+    <div class="ah-game">
+      <div class="ah-image-frame" [class.won]="hasWon" [class.lost]="hasLost">
+        <img [src]="imagePath" alt="Estado del ahorcado" loading="eager" decoding="sync" />
+      </div>
+
+      <div class="ah-word-area">
+        <div class="ah-word">
+          @for (letter of displayWord; track $index) {
+            <span class="ah-letter" [class.revealed]="letter !== '_'">
+              {{ letter === '_' ? '' : letter }}
+            </span>
+          }
+        </div>
+
+        @if (gameState === 'finished') {
+          <div class="ah-result" [class.won]="hasWon" [class.lost]="hasLost">
+            <span class="ah-result-msg">{{ message }}</span>
+            <span class="ah-enter-hint">↵ &nbsp;Enter para reiniciar</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Overlay de inicio -->
+    @if (gameState === 'idle') {
+      <div class="ah-overlay">
+        <div class="ah-start-card">
+          <p class="ah-start-eyebrow">AGON</p>
+          <h2 class="ah-start-title">Ahorcado</h2>
+          <ul class="ah-start-rules">
+            <li>30 segundos para adivinar la palabra</li>
+            <li>Máximo 6 intentos fallidos</li>
+            <li>Teclado físico o botones en pantalla</li>
+          </ul>
+          <button class="ah-start-btn" type="button" (click)="startGame()">
+            Iniciar partida
+          </button>
+          <span class="ah-enter-hint">↵ &nbsp;Enter para comenzar</span>
+        </div>
+      </div>
+    }
+
   </div>
 
-  <div class="hangman-board">
-    <img [src]="imagePath" alt="Ahorcado" loading="lazy" decoding="async" />
-    <div class="word-display">{{ displayedWord }}</div>
+  <!-- Teclado QWERTY on-screen -->
+  <div class="ah-keyboard">
+    @for (row of keyRows; track $index) {
+      <div class="ah-key-row">
+        @for (letter of row; track letter) {
+          <button
+            type="button"
+            class="ah-key"
+            [class.correct]="isCorrectGuess(letter)"
+            [class.wrong]="isWrongGuess(letter)"
+            [disabled]="guessedLetters.has(letter) || gameState !== 'playing'"
+            (click)="onLetter(letter)">
+            {{ letter }}
+          </button>
+        }
+      </div>
+    }
   </div>
 
-  <div class="stats-row">
-    <span>Vidas: {{ attempts }} / {{ maxAttempts }}</span>
-    <span>Puntos: {{ score }}</span>
-  </div>
-
-  <div class="letters-grid">
-    <button
-      *ngFor="let letter of letters"
-      type="button"
-      [disabled]="guessedLetters.has(letter) || finished"
-      (click)="onLetter(letter)"
-      [class.used]="guessedLetters.has(letter)">
-      {{ letter }}
-    </button>
-  </div>
-
-  <div class="message-row">
-    <p *ngIf="message" class="game-message">{{ message }}</p>
-    <p *ngIf="hasLost && !message" class="game-message">Perdiste. La palabra era {{ word.toUpperCase() }}.</p>
-  </div>
-</section>
+</div>

@@ -1,0 +1,243 @@
+<div class="fb-shell">
+
+  <!-- PANTALLA DE INICIO -->
+  @if (gameState() === 'idle') {
+    <div class="fb-overlay">
+      <div class="fb-start-card">
+        <p class="fb-eyebrow">AGON · Juego propio</p>
+        <h2 class="fb-start-title">Firewall Breach</h2>
+        <p class="fb-start-desc">
+          Protegé los nodos críticos de la red. Bloqueá ataques antes de que comprometan
+          el sistema y sobreviví las 5 oleadas con integridad suficiente.
+        </p>
+
+        <!-- Selector de dificultad -->
+        <div class="fb-difficulty-group">
+          <button
+            class="fb-diff-btn"
+            [class.active]="difficulty() === 'easy'"
+            (click)="selectDifficulty('easy')">
+            Fácil <span class="fb-diff-hint">4 nodos · ×0.5</span>
+          </button>
+          <button
+            class="fb-diff-btn"
+            [class.active]="difficulty() === 'normal'"
+            (click)="selectDifficulty('normal')">
+            Normal <span class="fb-diff-hint">6 nodos · ×0.75</span>
+          </button>
+          <button
+            class="fb-diff-btn"
+            [class.active]="difficulty() === 'hard'"
+            (click)="selectDifficulty('hard')">
+            Difícil <span class="fb-diff-hint">8 nodos · ×1.0</span>
+          </button>
+        </div>
+
+        <button class="fb-start-btn" (click)="startGame()">
+          Iniciar partida
+        </button>
+
+        <!-- Instrucciones rápidas -->
+        <ul class="fb-rules">
+          <li><span class="fb-rule-tag warn">●</span> Subnodo amarillo = ataque en progreso</li>
+          <li><span class="fb-rule-tag danger">●</span> Subnodo rojo = comprometido</li>
+          <li>Hacé click en un nodo para seleccionarlo y elegí una acción.</li>
+          <li><strong>Bloquear</strong> detiene ataques activos.</li>
+          <li><strong>Parchear</strong> recupera subnodos ya comprometidos (+5% integridad).</li>
+        </ul>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════
+       PANTALLA DE RESULTADO
+  ══════════════════════════════════════════════ -->
+  @if (gameState() === 'finished') {
+    <div class="fb-overlay">
+      <div class="fb-result-card" [class.won]="integrity() > 0 && nodesFallen() <= nodes().length / 2">
+        <p class="fb-eyebrow">AGON · Firewall Breach</p>
+        <h2 class="fb-result-title">
+          {{ integrity() > 0 && nodesFallen() <= nodes().length / 2 ? '¡Red protegida!' : 'Sistema comprometido' }}
+        </h2>
+
+        <div class="fb-result-stats">
+          <div class="fb-rs-item">
+            <span class="fb-rs-label">Oleada máxima</span>
+            <span class="fb-rs-value">{{ currentWave() + 1 }} / 5</span>
+          </div>
+          <div class="fb-rs-item">
+            <span class="fb-rs-label">Integridad final</span>
+            <span class="fb-rs-value" [style.color]="integrityColor()">{{ integrity() }}%</span>
+          </div>
+          <div class="fb-rs-item">
+            <span class="fb-rs-label">Nodos caídos</span>
+            <span class="fb-rs-value">{{ nodesFallen() }}</span>
+          </div>
+          <div class="fb-rs-item">
+            <span class="fb-rs-label">Precisión</span>
+            <span class="fb-rs-value">
+              {{ actionsTotal() > 0 ? ((actionsSuccessful() / actionsTotal()) * 100 | number:'1.0-0') : 0 }}%
+            </span>
+          </div>
+        </div>
+
+        <button class="fb-start-btn" (click)="startGame()">
+          Jugar de nuevo
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════
+       HUD SUPERIOR (visible durante la partida)
+  ══════════════════════════════════════════════ -->
+  @if (gameState() === 'playing' || gameState() === 'wave-break') {
+    <header class="fb-hud">
+
+      <!-- Integridad del sistema -->
+      <div class="fb-hud-block">
+        <span class="fb-hud-label">Integridad</span>
+        <div class="fb-integrity-track">
+          <div
+            class="fb-integrity-bar"
+            [style.width]="integrityPct()"
+            [style.background]="integrityColor()">
+          </div>
+        </div>
+        <span class="fb-hud-value" [style.color]="integrityColor()">{{ integrity() }}%</span>
+      </div>
+
+      <!-- Oleada actual -->
+      <div class="fb-hud-block center">
+        @if (gameState() === 'wave-break') {
+          <span class="fb-wave-label break">Próxima oleada en {{ phaseTimeLeft() }}s</span>
+        } @else {
+          <span class="fb-wave-label">Oleada {{ currentWave() + 1 }} / {{ 5 }}</span>
+          <span class="fb-wave-timer" [class.urgent]="phaseTimeLeft() <= 5">{{ phaseTimeLeft() }}s</span>
+        }
+      </div>
+
+      <!-- Dificultad y nodos caídos -->
+      <div class="fb-hud-block right">
+        <span class="fb-hud-label">{{ difficultyLabel() }}</span>
+        <span class="fb-hud-value">{{ nodesFallen() }} caídos</span>
+      </div>
+
+    </header>
+
+    <!-- ══════════════════════════════════════════════
+         GRAFO DE RED (SVG)
+    ══════════════════════════════════════════════ -->
+    <div class="fb-graph-wrapper">
+      <svg
+        class="fb-graph"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="xMidYMid meet"
+        aria-label="Red de nodos">
+
+        <!-- Líneas de conexión entre nodos -->
+        @for (conn of connections(); track conn.from.id) {
+          <line
+            class="fb-conn"
+            [class.danger]="conn.from.status === 'fallen' || conn.to.status === 'fallen'"
+            [attr.x1]="conn.from.x"
+            [attr.y1]="conn.from.y"
+            [attr.x2]="conn.to.x"
+            [attr.y2]="conn.to.y" />
+        }
+
+        <!-- Nodos -->
+        @for (node of nodes(); track node.id) {
+          <g
+            class="fb-node-group"
+            [class.selected]="selectedNodeId() === node.id"
+            [class.fallen]="node.status === 'fallen'"
+            (click)="selectNode(node.id)">
+
+            <!-- Círculo exterior del nodo -->
+            <circle
+              class="fb-node-circle"
+              [class.safe]="node.status === 'safe'"
+              [class.warning]="node.status === 'warning'"
+              [class.fallen]="node.status === 'fallen'"
+              [attr.cx]="node.x"
+              [attr.cy]="node.y"
+              r="7" />
+
+            <!-- Label del nodo -->
+            <text
+              class="fb-node-label"
+              [attr.x]="node.x"
+              [attr.y]="node.y + 0.8"
+              text-anchor="middle"
+              dominant-baseline="middle">
+              {{ node.label }}
+            </text>
+
+            <!-- Subnodos: dos círculos pequeños orbitando el nodo -->
+            @for (sub of node.subnodes; track sub.id; let si = $index) {
+              <circle
+                class="fb-subnode"
+                [class.safe]="sub.status === 'safe'"
+                [class.warning]="sub.status === 'warning'"
+                [class.compromised]="sub.status === 'compromised'"
+                [attr.cx]="node.x + (si === 0 ? -4.5 : 4.5)"
+                [attr.cy]="node.y - 8"
+                r="1.8" />
+            }
+
+          </g>
+        }
+
+      </svg>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         PANEL DE ACCIONES (aparece al seleccionar un nodo)
+    ══════════════════════════════════════════════ -->
+    <div class="fb-action-panel" [class.visible]="selectedNode() !== null">
+      @if (selectedNode(); as node) {
+        <div class="fb-action-header">
+          <span class="fb-action-node-id">Nodo {{ node.label }}</span>
+          <span
+            class="fb-action-status"
+            [class.safe]="node.status === 'safe'"
+            [class.warning]="node.status === 'warning'">
+            {{ node.status === 'safe' ? 'Estable' : 'Bajo ataque' }}
+          </span>
+        </div>
+
+        <!-- Estado de los subnodos -->
+        <div class="fb-subnode-status">
+          @for (sub of node.subnodes; track sub.id; let si = $index) {
+            <div class="fb-sub-chip" [class]="sub.status">
+              <span class="fb-sub-dot"></span>
+              Sub-{{ si + 1 }}
+              @if (sub.status === 'warning') {
+                <span class="fb-sub-ttl">{{ sub.timeToCompromise }}s</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="fb-action-btns">
+          <button
+            class="fb-action-btn block"
+            [disabled]="!node.subnodes.some(s => s.status === 'warning')"
+            (click)="blockNode()">
+            🛡 Bloquear
+          </button>
+          <button
+            class="fb-action-btn patch"
+            [disabled]="!node.subnodes.some(s => s.status === 'compromised')"
+            (click)="patchNode()">
+            🔧 Parchear
+          </button>
+        </div>
+      }
+    </div>
+
+  }
+
+</div>

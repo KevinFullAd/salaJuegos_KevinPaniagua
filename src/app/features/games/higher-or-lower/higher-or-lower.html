@@ -1,29 +1,164 @@
-<section class="game-shell">
-  <div class="game-header">
-    <div>
-      <p class="eyebrow">Mayor o Menor</p>
-      <h2>Elige la siguiente carta</h2>
+<div class="hol-shell">
+
+  <!-- Header: eyebrow + stats -->
+  <header class="hol-header">
+    <p class="hol-eyebrow">AGON · Mayor o Menor</p>
+    <div class="hol-stats">
+      <div class="hol-stat">
+        <span class="hol-stat-label">Aciertos</span>
+        <span class="hol-stat-value">{{ score() }}</span>
+      </div>
+      <div class="hol-stat">
+        <span class="hol-stat-label">Rondas</span>
+        <span class="hol-stat-value">{{ guesses() }}</span>
+      </div>
+      <div class="hol-stat">
+        <span class="hol-stat-label">Cartas</span>
+        <span class="hol-stat-value">{{ cardsRemaining() }}</span>
+      </div>
     </div>
-    <button type="button" class="secondary-button" (click)="newGame()">Reiniciar</button>
-  </div>
+  </header>
 
-  <div class="card-display">
-    <img class="game-illustration" src="/assets/higher-or-lower.png" alt="Mayor o Menor" loading="lazy" decoding="async" />
-    <div class="playing-card">
-      <span class="card-rank">{{ currentCard.rank }}</span>
-      <span class="card-suit">{{ currentCard.suit }}</span>
+  <!-- Contenedor central (juego + overlays) -->
+  <div class="hol-content">
+
+    <!-- Arena permanente -->
+    <div class="hol-arena">
+
+      <div class="hol-cards-row">
+
+        <!-- Carta actual -->
+        <div class="hol-card-slot">
+          <span class="hol-slot-label">Carta actual</span>
+          @if (currentCard(); as card) {
+            <div class="hol-card hol-card--face-up">
+              <img [src]="card.image" [alt]="card.value + ' · ' + card.suit" class="hol-card-img" />
+            </div>
+          } @else {
+            <div class="hol-card hol-card--placeholder"></div>
+          }
+        </div>
+
+        <!-- Centro: VS / badge de resultado -->
+        <div class="hol-divider-col">
+          @if (isFeedback()) {
+            <div class="hol-badge"
+                 [class.hol-badge--correct]="lastCorrect() === true"
+                 [class.hol-badge--wrong]="lastCorrect() === false">
+              {{ lastCorrect() ? '✓' : '✗' }}
+            </div>
+          } @else {
+            <span class="hol-vs">VS</span>
+          }
+        </div>
+
+        <!-- Siguiente carta -->
+        <div class="hol-card-slot">
+          <span class="hol-slot-label">Siguiente</span>
+          @if (nextCard(); as card) {
+            <div class="hol-card hol-card--face-up"
+                 [class.hol-card--correct]="lastCorrect() === true"
+                 [class.hol-card--wrong]="lastCorrect() === false">
+              <img [src]="card.image" [alt]="card.value + ' · ' + card.suit" class="hol-card-img" />
+            </div>
+          } @else if (isPlaying()) {
+            <div class="hol-card hol-card--face-down">
+              <img src="https://deckofcardsapi.com/static/img/back.png" alt="Carta boca abajo" class="hol-card-img" />
+            </div>
+          } @else {
+            <div class="hol-card hol-card--placeholder"></div>
+          }
+        </div>
+
+      </div>
+
+      <!-- Texto de estado bajo las cartas -->
+      <div class="hol-status">
+        @if (isPlaying()) {
+          <p class="hol-hint">↑ Mayor &nbsp;·&nbsp; ↓ Menor</p>
+        }
+        @if (isFeedback()) {
+          <p class="hol-feedback-msg"
+             [class.hol-feedback-msg--correct]="lastCorrect() === true"
+             [class.hol-feedback-msg--wrong]="lastCorrect() === false">
+            {{ lastCorrect() ? '¡Correcto!' : '¡Incorrecto!' }}
+          </p>
+        }
+        @if (errorMsg()) {
+          <p class="hol-error-inline">{{ errorMsg() }}</p>
+        }
+      </div>
+
     </div>
-    <p class="instructions">La proxima carta sera mayor o menor?</p>
+
+    <!-- Overlay: idle -->
+    @if (isIdle()) {
+      <div class="hol-overlay">
+        <div class="hol-start-card">
+          <p class="hol-start-eyebrow">AGON</p>
+          <h2 class="hol-start-title">Mayor o Menor</h2>
+          <ul class="hol-start-rules">
+            <li>Adivina si la siguiente carta es mayor o menor</li>
+            <li>↑ Flecha arriba — Mayor</li>
+            <li>↓ Flecha abajo — Menor</li>
+            <li>Mazo real de 52 cartas barajado</li>
+          </ul>
+          @if (errorMsg()) {
+            <p class="hol-start-error">{{ errorMsg() }}</p>
+          }
+          <button class="hol-start-btn" type="button" (click)="startGame()">
+            Iniciar partida
+          </button>
+          <span class="hol-enter-hint">↵ &nbsp;Enter para comenzar</span>
+        </div>
+      </div>
+    }
+
+    <!-- Overlay: cargando -->
+    @if (isLoading()) {
+      <div class="hol-overlay">
+        <div class="hol-loader">
+          <div class="hol-spinner"></div>
+          <span>Barajando el mazo…</span>
+        </div>
+      </div>
+    }
+
+    <!-- Overlay: terminado -->
+    @if (isFinished()) {
+      <div class="hol-overlay">
+        <div class="hol-start-card">
+          <p class="hol-start-eyebrow">{{ accuracy() >= 50 ? '¡Victoria!' : 'Juego terminado' }}</p>
+          <h2 class="hol-start-title">{{ score() }} / {{ guesses() }}</h2>
+          <p class="hol-result-detail">{{ accuracy() }}% de acierto</p>
+          <button class="hol-start-btn" type="button" (click)="startGame()">
+            Jugar de nuevo
+          </button>
+          <span class="hol-enter-hint">↵ &nbsp;Enter para reiniciar</span>
+        </div>
+      </div>
+    }
+
   </div>
 
-  <div class="buttons-row">
-    <button class="action-button" type="button" [disabled]="finished" (click)="chooseHigher()">Mayor</button>
-    <button class="action-button" type="button" [disabled]="finished" (click)="chooseLower()">Menor</button>
+  <!-- Botones de acción -->
+  <div class="hol-actions">
+    <button
+      class="hol-btn hol-btn--higher"
+      type="button"
+      [disabled]="!isPlaying()"
+      (click)="guess(true)">
+      <span class="hol-btn-arrow">↑</span>
+      Mayor
+    </button>
+    <button
+      class="hol-btn hol-btn--lower"
+      type="button"
+      [disabled]="!isPlaying()"
+      (click)="guess(false)">
+      <span class="hol-btn-arrow">↓</span>
+      Menor
+    </button>
   </div>
 
-  <div class="game-footer">
-    <span>Puntos: {{ score }}</span>
-    <span>Cartas: {{ progressText }}</span>
-    <span>{{ message }}</span>
-  </div>
-</section>
+</div>

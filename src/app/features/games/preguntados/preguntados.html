@@ -1,41 +1,136 @@
-<section class="game-shell">
-  <div class="game-header">
-    <div>
-      <p class="eyebrow">Preguntados</p>
-      <h2>Responde correctamente</h2>
+<div class="pq-shell">
+
+  <!-- Header -->
+  <header class="pq-header">
+    <p class="pq-eyebrow">AGON · Preguntados</p>
+    <div class="pq-stats">
+      <div class="pq-stat">
+        <span class="pq-stat-label">Pregunta</span>
+        <span class="pq-stat-value">{{ questionNum() }}/5</span>
+      </div>
+      <div class="pq-stat">
+        <span class="pq-stat-label">Vidas</span>
+        <div class="pq-lives">
+          @for (alive of livesArray(); track $index) {
+            <span class="pq-heart" [class.pq-heart--lost]="!alive">♥</span>
+          }
+        </div>
+      </div>
+      <div class="pq-stat">
+        <span class="pq-stat-label">Puntos</span>
+        <span class="pq-stat-value">{{ score() }}</span>
+      </div>
     </div>
-    <button type="button" class="secondary-button" (click)="restart()">Reiniciar</button>
+  </header>
+
+  <!-- Timer bar (60 s global) -->
+  <app-timer-bar
+    [maxTime]="60"
+    (timesUp)="onTimesUp()"
+    (tick)="timeLeft.set($event)">
+  </app-timer-bar>
+
+  <!-- Contenedor central -->
+  <div class="pq-content">
+
+    <!-- Arena permanente -->
+    <div class="pq-arena">
+
+      @if (currentQuestion(); as q) {
+
+        <!-- Texto de la pregunta -->
+        <div class="pq-question-card">
+          @if (errorMsg()) {
+            <p class="pq-api-notice">{{ errorMsg() }}</p>
+          }
+          <p class="pq-question-text">{{ q.question }}</p>
+        </div>
+
+        <!-- Grid de opciones 2×2 -->
+        <div class="pq-options">
+          @for (opt of q.options; track opt; let i = $index) {
+            <button
+              class="pq-option"
+              type="button"
+              [disabled]="isFeedback() || isFinished()"
+              [class.pq-option--correct]="isFeedback() && opt === q.correctAnswer"
+              [class.pq-option--wrong]="isFeedback() && opt === selectedAnswer() && opt !== q.correctAnswer"
+              [class.pq-option--dim]="isFeedback() && opt !== q.correctAnswer && opt !== selectedAnswer()"
+              (click)="selectAnswer(opt)">
+              <span class="pq-option-key">{{ optionKeys[i] }}</span>
+              <span class="pq-option-text">{{ opt }}</span>
+            </button>
+          }
+        </div>
+
+      }
+
+    </div>
+
+    <!-- Overlay: idle -->
+    @if (isIdle()) {
+      <div class="pq-overlay">
+        <div class="pq-start-card">
+          <p class="pq-start-eyebrow">AGON</p>
+          <h2 class="pq-start-title">Preguntados</h2>
+          <ul class="pq-start-rules">
+            <li>5 preguntas · 4 opciones cada una</li>
+            <li>60 segundos en total para responderlas</li>
+            <li>3 vidas — una por cada error</li>
+            <li>Hasta 20 pts por pregunta según velocidad</li>
+            <li>A / B / C / D o 1 / 2 / 3 / 4 en el teclado</li>
+          </ul>
+          <button class="pq-start-btn" type="button" (click)="startGame()">
+            Iniciar partida
+          </button>
+          <span class="pq-enter-hint">↵ &nbsp;Enter para comenzar</span>
+        </div>
+      </div>
+    }
+
+    <!-- Overlay: cargando -->
+    @if (isLoading()) {
+      <div class="pq-overlay">
+        <div class="pq-loader">
+          <div class="pq-spinner"></div>
+          <span>Cargando preguntas…</span>
+        </div>
+      </div>
+    }
+
+    <!-- Overlay: terminado -->
+    @if (isFinished()) {
+      <div class="pq-overlay">
+        <div class="pq-start-card">
+          <p class="pq-start-eyebrow">
+            {{ lives() === 0 ? 'Sin vidas' : timeLeft() === 0 ? '¡Tiempo!' : '¡Completado!' }}
+          </p>
+          <h2 class="pq-start-title">{{ score() }} pts</h2>
+
+          <div class="pq-result-grid">
+            <div class="pq-result-item">
+              <span class="pq-result-label">Vidas</span>
+              <span class="pq-result-val">{{ lives() }}/3</span>
+            </div>
+            <div class="pq-result-item">
+              <span class="pq-result-label">Tiempo</span>
+              <span class="pq-result-val">{{ timeLeft() }}s</span>
+            </div>
+          </div>
+
+          <p class="pq-result-note">
+            Máximo posible: 100 pts
+            (5 correctas lo más rápido posible)
+          </p>
+
+          <button class="pq-start-btn" type="button" (click)="startGame()">
+            Jugar de nuevo
+          </button>
+          <span class="pq-enter-hint">↵ &nbsp;Enter para reiniciar</span>
+        </div>
+      </div>
+    }
+
   </div>
 
-  <div *ngIf="loading" class="status-box">Cargando preguntas...</div>
-  <div *ngIf="error" class="status-box error">{{ error }}</div>
-
-  <div *ngIf="!loading && !error && currentQuestion" class="question-card">
-    <div class="question-meta">
-      <span>Pregunta {{ currentIndex + 1 }} / {{ questions.length }}</span>
-      <span>Puntaje: {{ score }}</span>
-    </div>
-
-    <p class="question-text">{{ currentQuestion.question }}</p>
-
-    <div class="answers-grid">
-      <button
-        *ngFor="let answer of answers"
-        type="button"
-        [disabled]="!!selectedAnswer"
-        (click)="selectAnswer(answer)"
-        [class.correct]="selectedAnswer && answer === currentQuestion.correct_answer"
-        [class.wrong]="selectedAnswer && answer === selectedAnswer && answer !== currentQuestion.correct_answer">
-        {{ answer }}
-      </button>
-    </div>
-
-    <p class="result-text" *ngIf="selectedAnswer">
-      {{ selectedAnswer === currentQuestion.correct_answer ? 'Correcto!' : 'Incorrecto. La respuesta correcta era ' + currentQuestion.correct_answer }}
-    </p>
-
-    <div *ngIf="finished" class="status-box success">
-      Juego terminado. Tu puntaje es {{ score }}.
-    </div>
-  </div>
-</section>
+</div>

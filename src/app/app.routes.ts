@@ -23,6 +23,7 @@ export const routes: Routes = [
             {path:"games/ahorcado", loadComponent: () => import('@features/games/ahorcado/ahorcado').then((module) => module.Ahorcado), canActivate: [authGuard]},
             {path:"games/mayor-menor", loadComponent: () => import('@features/games/higher-or-lower/higher-or-lower').then((module) => module.HigherOrLower), canActivate: [authGuard]},
             {path:"games/preguntados", loadComponent: () => import('@features/games/preguntados/preguntados').then((module) => module.Preguntados), canActivate: [authGuard]},
+            {path:"games/firewall-breach", loadComponent: () => import('@features/games/firewall-breach/firewall-breach').then((m) => m.FirewallBreachComponent), canActivate: [authGuard]},
             // {path:"games/pasapalabra", loadComponent: () => import('@features/games/pasapalabra/pasapalabra').then((module) => module.Pasapalabra)},
             {path:"games/:slug", component: GamePlaceholder, canActivate: [authGuard]},
             {path:"about", component: About},
