@@ -8,8 +8,11 @@
   </div>
 
   <div class="card-display">
-    <img class="game-illustration" src="/assets/higher-or-lower.png" alt="Mayor o Menor" />
-    <div class="card-number">{{ currentNumber }}</div>
+    <img class="game-illustration" src="/assets/higher-or-lower.png" alt="Mayor o Menor" loading="lazy" decoding="async" />
+    <div class="playing-card">
+      <span class="card-rank">{{ currentCard.rank }}</span>
+      <span class="card-suit">{{ currentCard.suit }}</span>
+    </div>
     <p class="instructions">La proxima carta sera mayor o menor?</p>
   </div>
 
@@ -20,6 +23,7 @@
 
   <div class="game-footer">
     <span>Puntos: {{ score }}</span>
+    <span>Cartas: {{ progressText }}</span>
     <span>{{ message }}</span>
   </div>
 </section>

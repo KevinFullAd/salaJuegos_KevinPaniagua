@@ -123,6 +123,31 @@
 *::after {
   box-sizing: border-box;
   font-family: var(--app-font-family) !important;
+  scrollbar-color: var(--color-primary) rgba(5, 7, 13, 0.75);
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 1px;
+  height: 1px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(5, 7, 13, 0.75);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  box-shadow: 0 0 8px rgba(var(--color-primary-rgb), 0.9);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+  box-shadow: 0 0 8px rgba(var(--color-accent-rgb), 0.9);
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--color-bg);
 }
 
 html,

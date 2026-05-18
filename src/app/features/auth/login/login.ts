@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
@@ -17,8 +17,9 @@ import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 })
 export class Login {
   loginForm: FormGroup;
-  submitted = false;
-  showPassword = false;
+  submitted = signal(false);
+  showPassword = signal(false);
+  isSubmitting = signal(false);
   readonly eyeIcon = Eye;
   readonly eyeOffIcon = EyeOff;
   quickAccessUsers = [
@@ -36,40 +37,45 @@ export class Login {
     private authService: AuthService,
     private toastService: ToastService,
     private router: Router
-  ){
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    })
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
   }
 
   togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
+    this.showPassword.update(v => !v);
   }
 
-  fillQuickAccess(user: { email: string; password: string }) {
-    this.loginForm.patchValue({
-      email: user.email,
-      password: user.password,
-    });
-    this.submitted = false;
+  async fillQuickAccess(user: { email: string; password: string }) {
+    if (this.isSubmitting()) return;
+    this.loginForm.patchValue({ email: user.email, password: user.password });
+    this.submitted.set(false);
+    await this.onSubmit();
   }
 
   async onSubmit() {
-    this.submitted = true;
+    if (this.isSubmitting()) return;
 
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      try {
-        await this.authService.login(email, password);
-        this.toastService.show('LOGIN_SUCCESS');
-        this.router.navigate(['/']);
-      } catch {
-        this.toastService.show('LOGIN_ERROR');
-      }
-    } else {
+    this.submitted.set(true);
+
+    if (!this.loginForm.valid) {
       this.loginForm.markAllAsTouched();
       this.toastService.show('FORM_INVALID');
+      return;
+    }
+
+    const { email, password } = this.loginForm.value as { email: string; password: string };
+    this.isSubmitting.set(true);
+    try {
+      await this.authService.login(email, password);
+      this.toastService.show('LOGIN_SUCCESS');
+      void this.router.navigate(['/']);
+    } catch {
+      this.toastService.show('LOGIN_ERROR');
+    } finally {
+      this.isSubmitting.set(false);
     }
   }
 }

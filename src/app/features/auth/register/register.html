@@ -12,7 +12,7 @@
     <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
       <input type="text" placeholder="Nombre" formControlName="nombre" class="input input-card" />
     </app-card>
-    <small *ngIf="(registerForm.get('nombre')?.touched || submitted) && registerForm.get('nombre')?.invalid">
+    <small *ngIf="(registerForm.get('nombre')?.touched || submitted()) && registerForm.get('nombre')?.invalid">
       Mínimo 2 caracteres
     </small>
   </div>
@@ -21,7 +21,7 @@
     <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
       <input type="text" placeholder="Apellido" formControlName="apellido" class="input input-card" />
     </app-card>
-    <small *ngIf="(registerForm.get('apellido')?.touched || submitted) && registerForm.get('apellido')?.invalid">
+    <small *ngIf="(registerForm.get('apellido')?.touched || submitted()) && registerForm.get('apellido')?.invalid">
       Mínimo 2 caracteres
     </small>
   </div>
@@ -30,7 +30,7 @@
     <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
       <input type="number" placeholder="Edad" formControlName="edad" class="input input-card" />
     </app-card>
-    <small *ngIf="(registerForm.get('edad')?.touched || submitted) && registerForm.get('edad')?.invalid">
+    <small *ngIf="(registerForm.get('edad')?.touched || submitted()) && registerForm.get('edad')?.invalid">
       Debe ser entre 18 y 99
     </small>
   </div>
@@ -39,7 +39,7 @@
     <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
       <input type="email" placeholder="usuario@ejemplo.com" formControlName="email" class="input input-card" />
     </app-card>
-    <small *ngIf="(registerForm.get('email')?.touched || submitted) && registerForm.get('email')?.invalid">
+    <small *ngIf="(registerForm.get('email')?.touched || submitted()) && registerForm.get('email')?.invalid">
       Email inválido
     </small>
   </div>
@@ -48,7 +48,7 @@
     <app-card [bordered]="true" corners="TL BR" [cut]="12" [styles]="fieldCardStyles" borderColor="var(--border-color-soft)">
       <input type="password" placeholder="Contraseña" formControlName="password" class="input input-card" />
     </app-card>
-    <small *ngIf="(registerForm.get('password')?.touched || submitted) && registerForm.get('password')?.invalid">
+    <small *ngIf="(registerForm.get('password')?.touched || submitted()) && registerForm.get('password')?.invalid">
       Mínimo 6 caracteres
     </small>
   </div>

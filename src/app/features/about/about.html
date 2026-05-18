@@ -7,7 +7,7 @@
 
   <section class="about-grid" *ngIf="githubUser() as user; else loading">
     <div class="profile">
-      <img [src]="user.avatar_url" [alt]="user.login" />
+      <img [src]="user.avatar_url" [alt]="user.login" loading="lazy" decoding="async" />
       <div>
         <p class="eyebrow">Quien Soy</p>
         <h1>{{ user.name || user.login }}</h1>

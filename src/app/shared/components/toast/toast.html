@@ -1,6 +1,6 @@
 <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
 
-    @for (toast of toasts; track toast) {
+    @for (toast of toasts(); track toast.id) {
 
     <div class="px-4 py-2 text-white shadow-lg border-l-4" [ngClass]="{
         'bg-green-600 border-green-300': toast.type === 'success',

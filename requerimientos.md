@@ -7,13 +7,13 @@
 - [x] Login y registro funcionando
 - [x] Solo usuarios logueados pueden jugar
 - [x] Estadisticas por jugador y por juego
-- [ ] Cada juego guarda informacion relevante
-- [ ] Todos los juegos tienen condicion de victoria y derrota
+- [x] Cada juego guarda informacion relevante
+- [x] Todos los juegos tienen condicion de victoria y derrota
 - [x] NO usar `alert()`, usar modales
 - [x] Diseno uniforme en toda la app
 - [x] Navegacion entre pantallas
 - [x] UX clara en mensajes y acciones
-- [ ] Mostrar tiempo/puntaje en juegos
+- [x] Mostrar tiempo/puntaje en juegos
 - [x] Usar Bootstrap / PrimeNG / libreria de estilos
 - [x] Agregar animaciones
 - [x] Agregar favicon propio
@@ -97,43 +97,43 @@
 
 ## Juego: Ahorcado
 
-- [ ] Crear logica del juego
-- [ ] Mostrar letras con botones
-- [ ] NO usar teclado
-- [ ] Detectar victoria
-- [ ] Detectar derrota
-- [ ] Guardar resultado en DB
+- [x] Crear logica del juego
+- [x] Mostrar letras con botones
+- [x] NO usar teclado
+- [x] Detectar victoria
+- [x] Detectar derrota
+- [x] Guardar resultado en DB
 - [ ] Guardar:
-  - [ ] Usuario
-  - [ ] Tiempo
-  - [ ] Letras seleccionadas
-  - [ ] Otros datos relevantes
+  - [x] Usuario
+  - [x] Tiempo
+  - [x] Letras seleccionadas
+  - [x] Otros datos relevantes
 
 ## Juego: Mayor o Menor
 
-- [ ] Mostrar cartas
-- [ ] Permitir elegir mayor/menor
-- [ ] Detectar resultado
-- [ ] Guardar resultado en DB
+- [x] Mostrar cartas
+- [x] Permitir elegir mayor/menor
+- [x] Detectar resultado
+- [x] Guardar resultado en DB
 - [ ] Guardar:
-  - [ ] Usuario
-  - [ ] Cartas acertadas
-  - [ ] Otros datos relevantes
+  - [x] Usuario
+  - [x] Cartas acertadas
+  - [x] Otros datos relevantes
 
 ## Sala de Chat
 
-- [ ] Crear chat global
-- [ ] Solo accesible para usuarios logueados
-- [ ] Permitir enviar mensajes
-- [ ] Guardar mensajes en DB
+- [x] Crear chat global
+- [x] Solo accesible para usuarios logueados
+- [x] Permitir enviar mensajes
+- [x] Guardar mensajes en DB
 - [ ] Guardar:
-  - [ ] Usuario
-  - [ ] Mensaje
-  - [ ] Fecha
-- [ ] Actualizacion en tiempo real
-- [ ] Mostrar autor del mensaje
-- [ ] Mostrar hora
-- [ ] Diferenciar mensajes propios
+  - [x] Usuario
+  - [x] Mensaje
+  - [x] Fecha
+- [x] Actualizacion en tiempo real
+- [x] Mostrar autor del mensaje
+- [x] Mostrar hora
+- [x] Diferenciar mensajes propios
 
 ---
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -16,7 +16,7 @@ import { Card } from '@components/ui/card/card';
 })
 export class Register {
   registerForm: FormGroup;
-  submitted = false;
+  submitted = signal(false);
   fieldCardStyles = {
     padding: '0',
     background: 'var(--color-surface-elevated)',
@@ -38,14 +38,21 @@ export class Register {
   }
 
   async onSubmit() {
-    this.submitted = true;
+    this.submitted.set(true);
     if (this.registerForm.valid) {
       try {
         await this.authService.register(this.registerForm.value);
         this.toastService.show('REGISTER_SUCCESS');
-        this.router.navigate(['/']);
-      } catch {
-        this.toastService.show('REGISTER_ERROR');
+        void this.router.navigate(['/']);
+      } catch (error) {
+        const message = error instanceof Error ? error.message.toLowerCase() : '';
+        const isExistingUser =
+          message.includes('already') ||
+          message.includes('registered') ||
+          message.includes('exists') ||
+          message.includes('duplicate');
+
+        this.toastService.show(isExistingUser ? 'REGISTER_EXISTS' : 'REGISTER_ERROR');
       }
     } else {
       this.registerForm.markAllAsTouched();

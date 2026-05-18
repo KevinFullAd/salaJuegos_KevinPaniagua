@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '@supabase/supabase-js';
 import { SupabaseService } from '@core/services/supabase';
@@ -20,15 +21,23 @@ export class AuthService {
     private currentUserSubject = new BehaviorSubject<AppUser | null>(null);
     currentUser$ = this.currentUserSubject.asObservable();
 
-    constructor(private supabase: SupabaseService) {
-        this.loadUser();
-        this.supabase.client.auth.onAuthStateChange((_event, session) => {
-            if (session?.user) {
-                void this.setCurrentUser(session.user);
-            } else {
-                this.currentUserSubject.next(null);
-            }
-        });
+    constructor(
+        private supabase: SupabaseService,
+        @Inject(PLATFORM_ID) private platformId: object
+    ) {
+        if (isPlatformBrowser(this.platformId)) {
+            this.loadUser();
+            this.supabase.client.auth.onAuthStateChange((_event, session) => {
+                if (session?.user) {
+                    // Evitar doble llamada a getProfile si login() ya lo está procesando
+                    if (this.currentUserSubject.value?.id !== session.user.id) {
+                        void this.setCurrentUser(session.user);
+                    }
+                } else {
+                    this.currentUserSubject.next(null);
+                }
+            });
+        }
     }
 
     async login(email: string, password: string) {

@@ -15,7 +15,7 @@
 
     <ng-template #guestActions>
       <div class="home-session">
-        <p class="home-copy">Puedes jugar sin iniciar sesion. Si entras con tu cuenta, ademas podras guardar resultados.</p>
+        <p class="home-copy">Inicia sesion o crea una cuenta para jugar, chatear y guardar tus resultados.</p>
         <div class="home-actions">
           <a routerLink="/login" class="action-link">Login</a>
           <a routerLink="/register" class="action-link">Registro</a>
@@ -25,27 +25,20 @@
   </header>
 
   <section class="quick-access" aria-label="Accesos">
-    <app-cyber-button
-      label="LISTADOS"
-      icon="table-2"
-      variant="outline"
-      color="var(--color-primary)"
+    <app-cyber-button label="LISTADOS" icon="table-2" variant="outline" color="var(--color-primary)"
       routerLink="/results">
+    </app-cyber-button>
+    <app-cyber-button label="CHAT" icon="messages-square" variant="outline" color="var(--color-success)"
+      routerLink="/chat">
     </app-cyber-button>
   </section>
 
   <section class="games-grid" aria-label="Juegos disponibles">
-    <app-card
-      *ngFor="let juego of juegos"
-      [bordered]="true"
-      [clickable]="false"
-      corners="TR BL"
-      [cut]="16"
-      [borderColor]="juego.color"
-      customClass="game-card">
+    <app-card *ngFor="let juego of juegos" [bordered]="true" [clickable]="false" corners="TR BL" [cut]="16"
+      [borderColor]="juego.color" customClass="game-card">
       <div class="game-code" [style.color]="juego.color">{{ juego.codigo }}</div>
       <div class="game-media">
-        <img [src]="juego.imagen" [alt]="juego.nombre" />
+        <img [src]="juego.imagen" [alt]="juego.nombre" loading="lazy" decoding="async" />
       </div>
       <div class="game-body">
         <span class="game-status">{{ juego.estado }}</span>

@@ -4,7 +4,12 @@
       <p class="eyebrow">Listados</p>
       <h1>Resultados</h1>
     </div>
-    <a routerLink="/" class="back-link">Volver al home</a>
+    <div class="header-actions">
+      <button type="button" class="back-link history-toggle" (click)="toggleHistoryView()">
+        {{ showFullHistory() ? 'Ver top 3' : 'Ver historial completo' }}
+      </button>
+      <a routerLink="/" class="back-link">Volver al home</a>
+    </div>
   </header>
 
   @if (loading()) {
@@ -16,6 +21,63 @@
       <p class="state error">Error: {{ errorMessage() }}</p>
     </app-card>
   } @else {
+    <app-card [bordered]="true" corners="TR BL" [cut]="16" customClass="results-panel social-panel">
+      <div class="section-header">
+        <h2>Top jugadores</h2>
+        <span>{{ playerStandings().length }} usuarios</span>
+      </div>
+
+      <div class="players-grid">
+        @for (player of visiblePlayerStandings(); track player.userId; let index = $index) {
+            <article class="player-card">
+              <span class="rank">#{{ index + 1 }}</span>
+              <div>
+                <h3>{{ player.name }}</h3>
+                <p>{{ player.email }}</p>
+              </div>
+              <dl>
+                <div>
+                  <dt>Puntos</dt>
+                  <dd>{{ player.totalScore }}</dd>
+                </div>
+                <div>
+                  <dt>Victorias</dt>
+                  <dd>{{ player.wins }}</dd>
+                </div>
+                <div>
+                  <dt>Partidas</dt>
+                  <dd>{{ player.gamesPlayed }}</dd>
+                </div>
+              </dl>
+            </article>
+        }
+
+        @for (_ of playerPlaceholders(); track $index) {
+          <article class="player-card placeholder-card">
+            <span class="rank">#{{ visiblePlayerStandings().length + $index + 1 }}</span>
+            <div>
+              <h3>Sin jugador</h3>
+              <p>Esperando una partida guardada.</p>
+            </div>
+            <dl>
+              <div>
+                <dt>Puntos</dt>
+                <dd>-</dd>
+              </div>
+              <div>
+                <dt>Victorias</dt>
+                <dd>-</dd>
+              </div>
+              <div>
+                <dt>Partidas</dt>
+                <dd>-</dd>
+              </div>
+            </dl>
+          </article>
+        }
+      </div>
+    </app-card>
+
     <section class="results-grid">
       @for (section of gameSections; track section.slug) {
         <app-card [bordered]="true" corners="TR BL" [cut]="16" customClass="results-panel">
@@ -24,34 +86,35 @@
             <span>{{ resultsByGame(section.slug).length }} partidas</span>
           </div>
 
-          @if (resultsByGame(section.slug).length === 0) {
-            <p class="state">Todavia no hay partidas guardadas.</p>
-          } @else {
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Puntaje</th>
-                    <th>Tiempo</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (result of resultsByGame(section.slug); track result.id; let index = $index) {
-                    <tr>
-                      <td>{{ index + 1 }}</td>
-                      <td>{{ result.score }}</td>
-                      <td>{{ result.time_seconds }}s</td>
-                      <td>{{ result.won ? 'Victoria' : 'Derrota' }}</td>
-                      <td>{{ formatDate(result.created_at) }}</td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          }
+          <div class="result-list">
+            @for (result of visibleResultsByGame(section.slug); track result.id; let index = $index) {
+              <article class="result-row">
+                <span class="rank">#{{ index + 1 }}</span>
+                <div class="result-main">
+                  <h3>{{ getUserName(result) }}</h3>
+                  <p>{{ getMetric(result) }} · {{ result.time_seconds }}s</p>
+                </div>
+                <div class="score-box">
+                  <strong>{{ result.score }}</strong>
+                  <span>{{ result.won ? 'Victoria' : 'Derrota' }}</span>
+                </div>
+              </article>
+            }
+
+            @for (_ of resultPlaceholders(section.slug); track $index) {
+              <article class="result-row placeholder-card">
+                <span class="rank">#{{ visibleResultsByGame(section.slug).length + $index + 1 }}</span>
+                <div class="result-main">
+                  <h3>-</h3>
+                  <p>-</p>
+                </div>
+                <div class="score-box">
+                  <strong>-</strong>
+                  <span>-</span>
+                </div>
+              </article>
+            }
+          </div>
         </app-card>
       }
     </section>

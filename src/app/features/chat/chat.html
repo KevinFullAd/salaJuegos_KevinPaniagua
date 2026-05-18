@@ -1,0 +1,52 @@
+<div class="page page-default page-center chat-page">
+  <header class="chat-header">
+    <div>
+      <p class="eyebrow">Sala global</p>
+      <h1>Chat</h1>
+    </div>
+  </header>
+
+  <section class="chat-panel">
+    @if (loading()) {
+      <p class="state">Cargando mensajes...</p>
+    } @else if (errorMessage()) {
+      <p class="state error">Error: {{ errorMessage() }}</p>
+    } @else {
+      @if (hasNewMessages()) {
+        <button type="button" class="new-messages-button" (click)="showNewMessages()">
+          Mensajes nuevos
+        </button>
+      }
+
+      <div #messagesList class="messages-list" aria-live="polite" (scroll)="onMessagesScroll()">
+        <div class="messages-stack">
+          @if (messages().length === 0) {
+            <p class="state">Todavia no hay mensajes. Se el primero en escribir.</p>
+          } @else {
+            @for (message of messages(); track message.id) {
+              <article class="message" [class.own]="isOwnMessage(message)" [class.latest]="message.id === latestMessageId()">
+                <div class="message-meta">
+                  <strong>{{ message.userName }}</strong>
+                  <span>{{ formatTime(message.createdAt) }}</span>
+                </div>
+                <p>{{ message.text }}</p>
+              </article>
+            }
+          }
+        </div>
+      </div>
+    }
+
+    <form class="chat-form" (submit)="submitMessage($event)">
+      <textarea
+        [formControl]="messageControl"
+        rows="2"
+        maxlength="280"
+        placeholder="Escribe un mensaje">
+      </textarea>
+      <button type="button" [disabled]="sending() || messageControl.invalid" (click)="submitMessage($event)">
+        {{ sending() ? 'Enviando...' : 'Enviar' }}
+      </button>
+    </form>
+  </section>
+</div>
